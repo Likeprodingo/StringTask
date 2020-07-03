@@ -12,7 +12,8 @@ import java.util.StringJoiner;
 public class StringTextEditElement implements TextEditElement {
 
     private static final String CONSONANTS = "йцкгшщзхфвпрлджчсмтбqwrtpsdfghjkzxcvbnmЙЦКНГШЗЩХФВПРЛДЖЧСМТБQWRTPSDFGHJKLZXCVBNM";
-    private static final String SPACE = " ";
+    private static final String SPACE =" ";
+    private static final String NOT_LETTERS ="[^[a-zA-Zа-яА-Я]]";
 
     @Override
     public String replaceChar(String text, int index, char symbol) throws CustomException {
@@ -73,7 +74,7 @@ public class StringTextEditElement implements TextEditElement {
             throw new CustomException("wrong text");
         }
         String result;
-        result = text.replaceAll("[^[a-zA-Zа-яА-Я]]", " ");
+        result = text.replaceAll(NOT_LETTERS, " ");
         return result;
     }
 
