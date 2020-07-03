@@ -11,6 +11,7 @@ import java.util.StringJoiner;
 
 public class StringTextEditElement implements TextEditElement {
 
+    private static final String CONSONANTS = "йцкгшщзхфвпрлджчсмтбqwrtpsdfghjkzxcvbnmЙЦКНГШЗЩХФВПРЛДЖЧСМТБQWRTPSDFGHJKLZXCVBNM";
     private static final String SPACE = " ";
 
     @Override
@@ -32,21 +33,64 @@ public class StringTextEditElement implements TextEditElement {
 
     @Override
     public String replaceAll(String text, char condition, char replace, char insert) throws CustomException {
-        return null;
-    }//TODO
+        if (text == null || text.length() == 0) {
+            throw new CustomException("wrong text");
+        }
+        String[] words = text.split(SPACE);
+        String result = "";
+        int conditionIndex;
+        for (int i = 0; i < words.length; i++) {
+            conditionIndex = words[i].indexOf(condition);
+            if (words[i].indexOf(condition) != -1 &&
+                    conditionIndex < (words[i].length() - 1) &&
+                    words[i].charAt(conditionIndex + 1) == replace)
+                words[i] = words[i].replace(words[i].charAt(conditionIndex + 1), insert);
+        }
+        result = String.join(" ", words);
+        return result;
+    }
 
     @Override
     public String replaceWord(String text, int length, String insert) throws CustomException {
-        return null;
-    }//TODO
+        if (text == null || text.length() == 0 || insert == null) {
+            throw new CustomException("wrong text");
+        }
+        String[] words = text.split(SPACE);
+        String result = "";
+
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].length() == length) {
+                words[i] = insert;
+            }
+        }
+        result = String.join(" ", words);
+        return result;
+    }
 
     @Override
     public String clearText(String text) throws CustomException {
-        return null;
-    }//TODO
+        if (text == null || text.length() == 0) {
+            throw new CustomException("wrong text");
+        }
+        String result;
+        result = text.replaceAll("[^[a-zA-Zа-яА-Я]]", " ");
+        return result;
+    }
 
     @Override
     public String deleteCustomWords(String text, int length) throws CustomException {
-        return null;
-    }//TODO
+        int startPosition = 0;
+        if (text == null || text.length() == 0) {
+            throw new CustomException("wrong text");
+        }
+        StringBuilder result = new StringBuilder();
+        String[] words = text.split(SPACE);
+        for (String word : words) {
+            if (word.length() != length || CONSONANTS.indexOf(word.charAt(startPosition)) == -1) {
+                result.append(word);
+                result.append(' ');
+            }
+        }
+        return result.toString();
+    }
 }
