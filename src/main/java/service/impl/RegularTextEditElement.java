@@ -15,15 +15,15 @@ public class RegularTextEditElement implements TextEditElement {
     private static final String WORD_REPLACE_RULE = "\\b()(\\w{%d})()\\b";
     private static final String SPACE_CLEAR_RULE = "[ \\t\\n\\r]+";
     private static final String TEXT_CLEAR_RULE = "[^a-zA-Zа-яА-Я \\-]";
-    private static final String WORD_DELETE_RULE = "()(\\b[%s]\\w{%d}\\b)()";
+    private static final String WORD_DELETE_RULE = "()(\\b[%s]\\w{%d}\\s?\\b)()";
     private static final String CONSONANTS = "йцкгшщзхфвпрлджчсмтбqwrtpsdfghjkzxcvbnmЙЦКНГШЗЩХФВПРЛДЖЧСМТБQWRTPSDFGHJKLZXCVBNM";
 
     @Override
     public String replaceChar(String text, int index, char symbol) throws CustomException {
-        if (text == null || text.length() == 0) {
+        if (text == null || text.length() == 0 || index <=0) {
             throw new CustomException("wrong text");
         }
-        Pattern pattern = Pattern.compile(String.format(SENTENCE_FORMAT, index));
+        Pattern pattern = Pattern.compile(String.format(SENTENCE_FORMAT, index-1));
         Matcher matcher = pattern.matcher(text);
         return matcher.replaceAll(String.format(REPLACE_RULE, symbol));
     }

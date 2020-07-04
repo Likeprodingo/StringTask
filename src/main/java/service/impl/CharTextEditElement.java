@@ -28,7 +28,7 @@ public class CharTextEditElement implements TextEditElement {
                 textArray[i] = symbol;
             }
         }
-        return textArray.toString();
+        return new String(textArray);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CharTextEditElement implements TextEditElement {
                 textArray[i] = insert;
             }
         }
-        return textArray.toString();
+        return new String(textArray);
     }
 
     @Override
@@ -54,16 +54,20 @@ public class CharTextEditElement implements TextEditElement {
         char[] textArray = text.toCharArray();
         StringBuilder word = new StringBuilder("");
         int count = 0;
-        ArrayList<String> words = new ArrayList<>();
+        ArrayList<String> words = new ArrayList<String>();
         for (int i = 0; i < text.length(); i++) {
-            count++;
             if (textArray[i] == SPACE) {
-                words.add(count == length ? insert : word.toString());
+                word.append(SPACE);
+                words.add(count == length ? insert + SPACE: word.toString());
                 count = 0;
                 word = new StringBuilder("");
                 continue;
             }
             word.append(textArray[i]);
+            count++;
+            if(i==text.length()-1){
+                words.add(count == length ? insert : word.toString());
+            }
         }
         StringBuilder result = new StringBuilder("");
         for (String w : words) {
@@ -88,7 +92,7 @@ public class CharTextEditElement implements TextEditElement {
             }
             textArray[i] = SPACE;
         }
-        return textArray.toString();
+        return new String(textArray);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class CharTextEditElement implements TextEditElement {
             if (count == 0) {
                 firstLetter = textArray[i];
             }
-            if (textArray[i] == SPACE || i==length-1) {
+            if (textArray[i] == SPACE || i==textArray.length-1) {
                 if(count == length){
                     for (char consonant : consonants) {
                         if (firstLetter == consonant) {
@@ -115,11 +119,11 @@ public class CharTextEditElement implements TextEditElement {
                         }
                     }
                 }
-                for (int j = i - count; j < i; j++) {
+                for (int j = i - count; j <= i; j++) {
                     result.append(textArray[j]);
                 }
-                result.append(SPACE);
                 count = 0;
+                continue;
             }
             count++;
         }

@@ -12,8 +12,8 @@ import java.util.StringJoiner;
 public class StringTextEditElement implements TextEditElement {
 
     private static final String CONSONANTS = "йцкгшщзхфвпрлджчсмтбqwrtpsdfghjkzxcvbnmЙЦКНГШЗЩХФВПРЛДЖЧСМТБQWRTPSDFGHJKLZXCVBNM";
-    private static final String SPACE =" ";
-    private static final String NOT_LETTERS ="[^[a-zA-Zа-яА-Я]]";
+    private static final String SPACE = " ";
+    private static final String NOT_LETTERS = "[^[a-zA-Zа-яА-Я]]";
 
     @Override
     public String replaceChar(String text, int index, char symbol) throws CustomException {
@@ -24,7 +24,7 @@ public class StringTextEditElement implements TextEditElement {
         String[] words = text.split(SPACE);
         String result = "";
         for (int i = 0; i < words.length; i++) {
-            if (index > 0 && index < words[i].length()) {
+            if (index > 0 && index <= words[i].length()) {
                 words[i] = words[i].substring(startPosition, index - 1) + symbol + words[i].substring(index);
             }
         }
@@ -42,7 +42,7 @@ public class StringTextEditElement implements TextEditElement {
         int conditionIndex;
         for (int i = 0; i < words.length; i++) {
             conditionIndex = words[i].indexOf(condition);
-            if (words[i].indexOf(condition) != -1 &&
+            if (conditionIndex != -1 &&
                     conditionIndex < (words[i].length() - 1) &&
                     words[i].charAt(conditionIndex + 1) == replace)
                 words[i] = words[i].replace(words[i].charAt(conditionIndex + 1), insert);
@@ -86,12 +86,13 @@ public class StringTextEditElement implements TextEditElement {
         }
         StringBuilder result = new StringBuilder();
         String[] words = text.split(SPACE);
-        for (String word : words) {
-            if (word.length() != length || CONSONANTS.indexOf(word.charAt(startPosition)) == -1) {
-                result.append(word);
-                result.append(' ');
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].length() != length || CONSONANTS.indexOf(words[i].charAt(startPosition)) == -1) {
+                result.append(words[i]);
+                result.append(" ");
             }
         }
+        result.deleteCharAt(result.length()-1);
         return result.toString();
     }
 }
